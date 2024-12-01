@@ -6,7 +6,7 @@
 /*   By: inajah <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/01 10:01:56 by inajah            #+#    #+#             */
-/*   Updated: 2024/12/01 11:06:03 by inajah           ###   ########.fr       */
+/*   Updated: 2024/12/01 12:34:53 by inajah           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,25 +58,26 @@ int	ft_is_valid_arg(char *arg, int *out)
 	int	sign;
 
 	i = 0;
+	arg = ft_strtrim(arg, " ");
+	if (!arg)
+		return (FALSE);
 	sign = (arg[i] == '-');
 	if (arg[i] == '-' || arg[i] == '+')
-	{
-		if (!arg[i + 1])
-			return (FALSE);
 		i++;
-	}
+	if (!arg[i])
+		return (free(arg), FALSE);
 	result = 0;
 	while (arg[i])
 	{
 		if (!ft_isdigit(arg[i]))
-			return (FALSE);
+			return (free(arg), FALSE);
 		if (result > (MAX_INT + sign - (arg[i] - '0')) / 10)
-			return (FALSE); 
+			return (free(arg), FALSE); 
 		result = result * 10 + (arg[i] - '0');
 		i++;
 	}
 	*out = result * (1 - 2 * sign);
-	return (TRUE);
+	return (free(arg), TRUE);
 }
 
 t_stack	*ft_parse_args(int ac, char **av)
@@ -125,6 +126,7 @@ int	main(int ac, char **av)
 		i--;
 	}
 	ft_printf("]\n");
+	ft_stack_free(s);
 	return (0);
 }
 
