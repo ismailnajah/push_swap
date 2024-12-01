@@ -6,7 +6,7 @@
 /*   By: inajah <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/01 10:01:56 by inajah            #+#    #+#             */
-/*   Updated: 2024/12/01 16:50:30 by inajah           ###   ########.fr       */
+/*   Updated: 2024/12/01 17:30:17 by inajah           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ t_stack	*ft_stack_init(int size)
 	s = malloc(sizeof(t_stack));
 	if (!s)
 		return (NULL);
-	s->top = size - 1;
+	s->top = -1;
 	s->values = malloc(size * sizeof(int));
 	if (!s->values)
 	{
@@ -98,6 +98,7 @@ t_stack	*ft_parse_args(int ac, char **av)
 		s->values[i] = value;
 		i++;
 	}
+	s->top = i - 1;
 	return (s);
 }
 
@@ -152,16 +153,42 @@ char	**ft_get_args(int ac, char **av)
 	return (free(merged), av);
 }
 
-void	ft_push_swap(t_stack *a, t_stack *b)
+void	ft_stack_print(t_stack *s, char c)
 {
 	int	i;
 
-	(void) b;
-	i = a->top;
-	ft_printf("stack a: [ ");
+	i = s->top;
+	ft_printf("stack %c: [ ", c);
 	while (i >= 0)
-		ft_printf("%d ", a->values[i--]);
+		ft_printf("%d ", s->values[i--]);
 	ft_printf("]\n");
+}
+
+void	ft_push_swap(t_stack *a, t_stack *b)
+{	
+	ft_stack_print(a, 'a');
+	ft_stack_print(b, 'b');
+	ft_printf("---------------\n");
+
+	ft_stack_swap(a);
+	ft_stack_push(a, b);
+	ft_stack_swap(b);
+
+	ft_stack_print(a, 'a');
+	ft_stack_print(b, 'b');
+	ft_printf("---------------\n");
+
+	ft_stack_rotate(a);
+
+	ft_stack_print(a, 'a');
+	ft_stack_print(b, 'b');
+	ft_printf("---------------\n");
+
+	ft_stack_rrotate(a);
+
+	ft_stack_print(a, 'a');
+	ft_stack_print(b, 'b');
+	ft_printf("---------------\n");
 }
 
 int	main(int ac, char **av)

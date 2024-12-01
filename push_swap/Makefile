@@ -6,7 +6,8 @@ CFLAGS = -Wall -Wextra -Werror -g #-fsanitize=address
 LIBFTDIR = libft
 LIBFT = $(LIBFTDIR)/libft.a
 
-SRC = main.c
+SRC = main.c\
+	  ft_stack_instructions.c\
 
 OBJDIR = obj
 OBJ := $(SRC:%.c=$(OBJDIR)/%.o)
