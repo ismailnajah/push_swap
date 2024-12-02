@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_stack_instructions.c                            :+:      :+:    :+:   */
+/*   ft_stack_ops.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: inajah <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/01 16:52:36 by inajah            #+#    #+#             */
-/*   Updated: 2024/12/01 17:26:04 by inajah           ###   ########.fr       */
+/*   Updated: 2024/12/02 09:31:08 by inajah           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,8 @@ void	ft_stack_push(t_stack *src, t_stack *dst)
 
 void	ft_stack_rotate(t_stack *s)
 {
-	int i;
-	int first;
+	int	i;
+	int	first;
 
 	i = s->top;
 	first = s->values[s->top];
@@ -50,7 +50,7 @@ void	ft_stack_rotate(t_stack *s)
 void	ft_stack_rrotate(t_stack *s)
 {
 	int	i;
-	int last;
+	int	last;
 
 	i = 0;
 	last = s->values[0];

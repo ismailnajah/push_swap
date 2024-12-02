@@ -7,7 +7,9 @@ LIBFTDIR = libft
 LIBFT = $(LIBFTDIR)/libft.a
 
 SRC = main.c\
-	  ft_stack_instructions.c\
+	  ft_parse.c\
+	  ft_stack.c\
+	  ft_stack_ops.c\
 
 OBJDIR = obj
 OBJ := $(SRC:%.c=$(OBJDIR)/%.o)
