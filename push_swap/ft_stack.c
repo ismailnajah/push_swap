@@ -6,7 +6,7 @@
 /*   By: inajah <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 09:18:40 by inajah            #+#    #+#             */
-/*   Updated: 2024/12/02 09:19:36 by inajah           ###   ########.fr       */
+/*   Updated: 2024/12/02 20:43:29 by inajah           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,8 @@ void	ft_stack_print(t_stack *s, char c)
 	int	i;
 
 	i = s->top;
-	ft_printf("stack %c: [ ", c);
+	ft_printf("stack %c: top-> ", c);
 	while (i >= 0)
 		ft_printf("%d ", s->values[i--]);
-	ft_printf("]\n");
+	ft_printf(" <-bottom\n");
 }

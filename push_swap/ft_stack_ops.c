@@ -6,7 +6,7 @@
 /*   By: inajah <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/01 16:52:36 by inajah            #+#    #+#             */
-/*   Updated: 2024/12/02 09:31:08 by inajah           ###   ########.fr       */
+/*   Updated: 2024/12/02 20:27:06 by inajah           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	ft_stack_swap(t_stack *s)
 	s->values[s->top - 1] = tmp;
 }
 
-void	ft_stack_push(t_stack *src, t_stack *dst)
+void	ft_stack_push(t_stack *dst, t_stack *src)
 {
 	if (src->top < 0)
 		return ;
