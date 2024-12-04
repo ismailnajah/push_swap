@@ -6,7 +6,7 @@
 /*   By: inajah <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/01 10:01:56 by inajah            #+#    #+#             */
-/*   Updated: 2024/12/03 14:06:13 by inajah           ###   ########.fr       */
+/*   Updated: 2024/12/04 18:39:05 by inajah           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,10 +119,25 @@ void	sort_tiny_stack(t_stack *a)
 
 }
 
+int	ft_stack_sorted(t_stack *s)
+{
+	int	i;
+
+	i = 0;
+	while (i < s->top)
+	{
+		if (s->values[i] < s->values[i + 1])
+			return (FALSE);
+		i++;
+	}
+	return (TRUE);
+}
+
 void	push_swap_small(t_stack *a, t_stack *b)
 {
 	int i;
-	while (a->top > 2)
+	
+	while (a->top > 2 && !ft_stack_sorted(a))
 		pb(a, b);
 	sort_tiny_stack(a);
 	while (b->top >= 0)
@@ -190,52 +205,226 @@ void	ft_move_min_to_top(t_stack *a)
 	}
 }
 
-int	ft_stack_sorted(t_stack *s)
+void	ft_swap(int *a, int *b)
 {
-	int	i;
+	int tmp;
 
-	i = 0;
-	while (i < s->top)
-	{
-		if (s->values[i] < s->values[i + 1])
-			return (FALSE);
-		i++;
-	}
-	return (TRUE);
+	tmp = *a;
+	*a = *b;
+	*b = tmp;
 }
 
-void	ft_push_swap_naive(t_stack *a, t_stack *b)
+void	ft_print_array(int *arr, int size)
 {
-	//ft_stack_print(a, 'a');
-	while (a->top > 1 && !ft_stack_sorted(a))
+	ft_printf("index: [ ");
+	for(int i = size - 1; i >= 0; i--)
+		ft_printf("%d ", arr[i]);
+	ft_printf("]\n");
+}
+
+void get_sorted_array_index(t_stack *a)
+{
+	int	*index;
+	int	swap;
+	int	i;
+	int	j;
+
+	index = malloc((a->top + 1) * sizeof(int));
+	i = 0;
+	while (i < a->top + 1)
+	{
+		index[i] = i;
+		i++;
+	}
+	swap = 1;
+	while (swap)
+	{
+		swap = 0;
+		i = 0;
+		while (i < a->top)
+		{
+			if (a->values[index[i]] < a->values[index[i + 1]])
+			{
+				ft_swap(index + i, index + i + 1);
+				swap++;
+			}
+			i++;
+		}
+	}
+	i = a->top;
+	while (i >= 0)
+	{
+		j = a->top;
+		while (j >= 0)
+		{
+			if (i == index[j])
+				a->values[i] = j;
+			j--;
+		}
+		i--;
+	}
+	free(index);
+}
+
+
+void	push_swap_naive(t_stack *a, t_stack *b)
+{
+	while (a->top > 4  && !ft_stack_sorted(a))
 	{
 		ft_move_min_to_top(a);
 		pb(a, b);
 	}
-	if (a->values[0] < a->values[1])
-		sa(a);
-	//ft_printf("-----------------------------------\n");
-	//ft_stack_print(a, 'a');
-	//ft_stack_print(b, 'b');
+	push_swap_small(a, b);
 	while (b->top >= 0)
 		pa(a,b);
-	//ft_printf("-----------------------------------\n");
-	//ft_stack_print(a, 'a');
 }
 
-void	ft_push_swap(t_stack *a, t_stack *b)
+void	push_a_to_b(t_stack *a, t_stack *b)
 {
-	//return ft_push_swap_naive(a, b);
-	while (a->values[0] <= a->values[a->top])
-		rra(a);
-	ft_stack_print(a, 'a');
+	int middle;
+
+	get_sorted_array_index(a);
+	middle = (a->top + 1) / 2;
+	while (a->top > 2)
+	{
+		if (a->values[a->top] > middle)
+		{
+			pb(a, b);
+			rb(b);
+		}
+		else if (a->values[a->top] < middle)
+			pb(a, b);
+		else
+			ra(a);
+	}
+}
+
+int	get_pos_in_a(t_stack *a, int value)
+{
+	int i;
+
+	i = a->top;
+	if (value < a->values[i])
+		return (a->top + 1);
+	while (i > 0)
+	{
+		if (a->values[i] < value && value < a->values[i - 1])
+			break ;
+		i--;
+	}
+	return (i);
+}
+
+int	get_cost_of_pos(t_stack *a, t_stack *b, int pos, int i)
+{
+	int cost_a;
+	int cost_b;
+
+	cost_a = ((a->top + 1) - pos) * (pos >= (a->top + 1) / 2) + pos * (pos < (a->top + 1) / 2);
+	cost_b = (b->top - i) * (i >= b->top / 2) + (i + 1) * (i < b->top / 2);
+	return (cost_a + cost_b + 1);
+}
+
+void	push_swap_cost(t_stack *a, t_stack *b)
+{
+	int pos;
+	int	cost;
+	int min_cost_pos;
+	int	min_cost;
+	int	min_cost_index;
+	int	i;
+	char next[5];
+
+	push_a_to_b(a, b);
+	sort_tiny_stack(a);
+	while (b->top >= 0)
+	{
+		i = b->top;
+		min_cost_index = i;
+		min_cost_pos = get_pos_in_a(a, b->values[i]);
+		min_cost = get_cost_of_pos(a, b, pos, i);
+		while (i >= 0)
+		{
+			pos = get_pos_in_a(a, b->values[i]);
+			cost = get_cost_of_pos(a, b, pos, i);
+			if (cost < min_cost)
+			{
+				min_cost = cost;
+				min_cost_index = i;
+				min_cost_pos = pos;
+			}
+			i--;
+		}
+		//ft_printf(" min_cost: %d, min_cost_index: %d, min_cost_pos: %d\n", min_cost, min_cost_index, min_cost_pos);
+		pos = min_cost_pos;
+		// make the min_cost posistion the top of a
+		if (pos > (a->top + 1) / 2)
+		{
+			i = a->top - pos;
+			while (i >= 0)
+			{
+				ra(a);
+				i--;
+			}
+		}
+		else
+		{
+			i = pos;
+			while (i > 0)
+			{
+				rra(a);
+				i--;
+			}
+		}
+		// move the min_cost to top in b
+		if (min_cost_index > (b->top / 2))
+		{
+			i = b->top - min_cost_index;
+			while (i > 0)
+			{
+				rb(b);
+				i--;
+			}
+		}
+		else
+		{
+			i = min_cost_index;
+			while (i >= 0)
+			{
+				rrb(b);
+				i--;
+			}
+		}
+		pa(a, b);
+		int rev = (a->values[a->top] > a->values[a->top / 2]);
+		while (a->values[a->top] > a->values[0])
+		{
+			if (rev)
+				ra(a);
+			else
+				rra(a);
+		}
+		//ft_stack_print(a, 'a');
+		//ft_stack_print(b, 'b');
+		//scanf("%3s", next);
+	}
+}
+
+void	push_swap(t_stack *a, t_stack *b)
+{
+	if (ft_stack_sorted(a))
+		return ;
+	if (a->top < 5)
+		return push_swap_small(a, b);
+	else
+		return push_swap_cost(a, b);
 }
 
 void	push_swap_console(t_stack *a, t_stack *b)
 {
 	char buff[10];
 	int	count;
-
+	
 	count = 0;
 	while (1)
 	{
@@ -258,12 +447,10 @@ void	push_swap_console(t_stack *a, t_stack *b)
 			rra(a);
 		if (strcmp(buff, "rrb") == 0)
 			rrb(b);
-		if (strcmp(buff, "run") == 0)
-			ft_printf("number of runs: %d\n", ft_count_runs(a->values, a->top + 1));
-		if (strcmp(buff, "nb") == 0)
-			ft_printf("number of instructions: %d\n", count);
+		if (strcmp(buff, "index") == 0)
+			get_sorted_array_index(a);
 		if (strcmp(buff, "test") == 0)
-			push_swap_small(a, b);
+			push_swap_cost(a, b);
 		count++;
 	}
 }
@@ -288,7 +475,7 @@ int	main(int ac, char **av)
 	if (!b)
 		return (ft_stack_free(a), 1);
 	//push_swap_console(a, b);
-	push_swap_small(a, b);
+	push_swap(a, b);
 	ft_stack_free(b);
 	ft_stack_free(a);
 	return (0);

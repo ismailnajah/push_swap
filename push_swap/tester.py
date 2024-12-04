@@ -6,7 +6,7 @@ import subprocess
 def main():
     errors = list()
     nb_inst = list()
-    for p in itertools.permutations([12, -3, 10, 5, 0]):
+    for p in itertools.permutations([12, -3, 10, 5, 0, 4]):
         arg = ' '.join(map(str,p))
         command = f"./push_swap {arg}"
         inst = subprocess.run(command, shell=True, capture_output=True,text=True)
