@@ -6,7 +6,7 @@
 /*   By: inajah <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/01 10:01:56 by inajah            #+#    #+#             */
-/*   Updated: 2024/12/05 09:19:22 by inajah           ###   ########.fr       */
+/*   Updated: 2024/12/05 10:38:08 by inajah           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -282,7 +282,7 @@ void	push_a_to_b(t_stack *a, t_stack *b)
 
 	get_sorted_array_index(a);
 	middle = (a->top + 1) / 2;
-	while (a->top > 2)
+	while (a->top > 2 && !ft_stack_sorted(a))
 	{
 		if (a->values[a->top] > middle)
 		{
@@ -322,10 +322,14 @@ int	get_cost_of_pos(t_stack *a, t_stack *b, int pos, int i)
 {
 	int cost_a;
 	int cost_b;
+	int min_index;
+	int	max_index;
 
 	cost_a = ((a->top + 1) - pos) * (pos >= (a->top + 1) / 2) + pos * (pos < (a->top + 1) / 2);
 	cost_b = (b->top - i) * (i >= b->top / 2) + (i + 1) * (i < b->top / 2);
-	return (cost_a + cost_b + 1);
+	if (pos == a->top + 1)
+		pos = a->top;
+	return (cost_a + cost_b + 1 + ft_abs(a->values[pos] - b->values[i]));
 }
 
 void	push_swap_cost(t_stack *a, t_stack *b)
@@ -339,7 +343,8 @@ void	push_swap_cost(t_stack *a, t_stack *b)
 	char next[5];
 
 	push_a_to_b(a, b);
-	sort_tiny_stack(a);
+	if (a->top == 2)
+		sort_tiny_stack(a);
 	while (b->top >= 0)
 	{
 		i = b->top;

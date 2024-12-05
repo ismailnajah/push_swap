@@ -6,7 +6,7 @@
 /*   By: inajah <inajah@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 11:18:36 by inajah            #+#    #+#             */
-/*   Updated: 2024/11/29 09:02:20 by inajah           ###   ########.fr       */
+/*   Updated: 2024/12/05 10:32:05 by inajah           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,6 +108,7 @@ int		ft_error(int code);
 void	*ft_abort(void *buffer);
 
 char	*get_next_line(int fd);
-
 int		ft_printf(const char *str, ...);
+
+long	ft_abs(long nb);
 #endif

@@ -6,7 +6,7 @@
 /*   By: inajah <inajah@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 14:08:01 by inajah            #+#    #+#             */
-/*   Updated: 2024/11/16 10:33:52 by inajah           ###   ########.fr       */
+/*   Updated: 2024/12/05 10:33:45 by inajah           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,8 +69,8 @@ int			ft_count_digits_base(unsigned long nb, size_t base);
 int			ft_skip_digits(const char *fmt, size_t i);
 int			ft_padd_output(t_format *fmt, int str_size);
 int			ft_padd_nb_zeros(unsigned int nb, int precision, int base);
-long long	ft_abs(long long nb);
-char		ft_get_sign(long long d);
+long		ft_abs(long nb);
+char		ft_get_sign(long d);
 
 int			ft_printf(const char *str, ...);
 #endif

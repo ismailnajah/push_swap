@@ -6,20 +6,20 @@
 /*   By: inajah <inajah@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 14:06:06 by inajah            #+#    #+#             */
-/*   Updated: 2024/11/05 14:06:06 by inajah           ###   ########.fr       */
+/*   Updated: 2024/12/05 10:33:59 by inajah           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-long long	ft_abs(long long nb)
+long	ft_abs(long nb)
 {
 	if (nb < 0)
 		return (-nb);
 	return (nb);
 }
 
-char	ft_get_sign(long long d)
+char	ft_get_sign(long d)
 {
 	if (d < 0)
 		return ('-');
