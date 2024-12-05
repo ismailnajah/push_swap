@@ -6,7 +6,7 @@
 /*   By: inajah <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/01 10:01:56 by inajah            #+#    #+#             */
-/*   Updated: 2024/12/04 18:39:05 by inajah           ###   ########.fr       */
+/*   Updated: 2024/12/05 09:19:22 by inajah           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,27 +167,37 @@ void	push_swap_small(t_stack *a, t_stack *b)
 	}
 }
 
-int	ft_get_min_index(t_stack *s)
+int	min(int a, int b)
 {
-	int	min_index;
+	return (a < b);
+}
+
+int max(int a, int b)
+{
+	return (a > b);
+}
+
+int	ft_get_index(t_stack *s, int (*cmp)(int, int))
+{
+	int	out_index;
 	int	i;
 
-	min_index = s->top;
+	out_index = s->top;
 	i = 0;
 	while (i < s->top)
 	{
-		if (s->values[i] < s->values[min_index])
-			min_index = i;
+		if (cmp(s->values[i], s->values[out_index]))
+			out_index = i;
 		i++;
 	}
-	return (min_index);
+	return (out_index);
 }
 
 void	ft_move_min_to_top(t_stack *a)
 {
 	int	min_index;
 
-	min_index = ft_get_min_index(a);
+	min_index = ft_get_index(a, min);
 	while (min_index != a->top)
 	{
 		if (min_index < a->top / 2)
@@ -243,7 +253,7 @@ void get_sorted_array_index(t_stack *a)
 		i = 0;
 		while (i < a->top)
 		{
-			if (a->values[index[i]] < a->values[index[i + 1]])
+			if (a->values[index[i]] > a->values[index[i + 1]])
 			{
 				ft_swap(index + i, index + i + 1);
 				swap++;
@@ -264,19 +274,6 @@ void get_sorted_array_index(t_stack *a)
 		i--;
 	}
 	free(index);
-}
-
-
-void	push_swap_naive(t_stack *a, t_stack *b)
-{
-	while (a->top > 4  && !ft_stack_sorted(a))
-	{
-		ft_move_min_to_top(a);
-		pb(a, b);
-	}
-	push_swap_small(a, b);
-	while (b->top >= 0)
-		pa(a,b);
 }
 
 void	push_a_to_b(t_stack *a, t_stack *b)
@@ -302,15 +299,21 @@ void	push_a_to_b(t_stack *a, t_stack *b)
 int	get_pos_in_a(t_stack *a, int value)
 {
 	int i;
+	int j;
+	int	min_index;
+	int max_index;
 
-	i = a->top;
-	if (value < a->values[i])
-		return (a->top + 1);
-	while (i > 0)
+	min_index = ft_get_index(a, min);
+	max_index = ft_get_index(a, max);
+	i = min_index;
+	while (i != max_index)
 	{
-		if (a->values[i] < value && value < a->values[i - 1])
+		j = i - 1;
+		if (j < 0)
+			j = a->top;
+		if (a->values[i] < value && value < a->values[j])
 			break ;
-		i--;
+		i = (i - 1) * (i - 1 >= 0) + a->top * (i - 1 < 0);
 	}
 	return (i);
 }
@@ -395,19 +398,31 @@ void	push_swap_cost(t_stack *a, t_stack *b)
 				i--;
 			}
 		}
-		pa(a, b);
-		int rev = (a->values[a->top] > a->values[a->top / 2]);
-		while (a->values[a->top] > a->values[0])
-		{
-			if (rev)
-				ra(a);
-			else
-				rra(a);
-		}
+		pa(a, b);	
 		//ft_stack_print(a, 'a');
 		//ft_stack_print(b, 'b');
 		//scanf("%3s", next);
 	}
+	int rev = (a->values[a->top] > a->values[a->top / 2]);
+    while (a->values[a->top] > a->values[0])
+	{
+		if (rev)
+			ra(a);
+		else
+			rra(a);
+    }
+}
+
+void	push_swap_naive(t_stack *a, t_stack *b)
+{
+	while (a->top > 4  && !ft_stack_sorted(a))
+	{
+		ft_move_min_to_top(a);
+		pb(a, b);
+	}
+	push_swap_small(a, b);
+	while (b->top >= 0)
+		pa(a,b);
 }
 
 void	push_swap(t_stack *a, t_stack *b)
@@ -450,6 +465,7 @@ void	push_swap_console(t_stack *a, t_stack *b)
 		if (strcmp(buff, "index") == 0)
 			get_sorted_array_index(a);
 		if (strcmp(buff, "test") == 0)
+			//ft_printf("min_index: %d, max_index: %d\n",ft_get_index(a, min), ft_get_index(a, max));
 			push_swap_cost(a, b);
 		count++;
 	}
