@@ -6,7 +6,7 @@
 /*   By: inajah <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/01 10:01:56 by inajah            #+#    #+#             */
-/*   Updated: 2024/12/05 10:38:08 by inajah           ###   ########.fr       */
+/*   Updated: 2024/12/05 13:28:15 by inajah           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -325,12 +325,15 @@ int	get_cost_of_pos(t_stack *a, t_stack *b, int pos, int i)
 	int min_index;
 	int	max_index;
 
-	cost_a = ((a->top + 1) - pos) * (pos >= (a->top + 1) / 2) + pos * (pos < (a->top + 1) / 2);
+	cost_a = ((a->top + 1) - pos) * (pos >= (a->top + 1) / 2) 
+		+ pos * (pos < (a->top + 1) / 2);
 	cost_b = (b->top - i) * (i >= b->top / 2) + (i + 1) * (i < b->top / 2);
 	if (pos == a->top + 1)
 		pos = a->top;
 	return (cost_a + cost_b + 1 + ft_abs(a->values[pos] - b->values[i]));
 }
+
+//#define CONSOLE
 
 void	push_swap_cost(t_stack *a, t_stack *b)
 {
@@ -340,7 +343,9 @@ void	push_swap_cost(t_stack *a, t_stack *b)
 	int	min_cost;
 	int	min_cost_index;
 	int	i;
-	char next[5];
+	int ra_iter;
+	int rb_iter;
+	char next[10];
 
 	push_a_to_b(a, b);
 	if (a->top == 2)
@@ -363,50 +368,112 @@ void	push_swap_cost(t_stack *a, t_stack *b)
 			}
 			i--;
 		}
-		//ft_printf(" min_cost: %d, min_cost_index: %d, min_cost_pos: %d\n", min_cost, min_cost_index, min_cost_pos);
 		pos = min_cost_pos;
 		// make the min_cost posistion the top of a
 		if (pos > (a->top + 1) / 2)
-		{
-			i = a->top - pos;
-			while (i >= 0)
-			{
-				ra(a);
-				i--;
-			}
-		}
+			ra_iter = a->top - pos + 1;
 		else
-		{
-			i = pos;
-			while (i > 0)
-			{
-				rra(a);
-				i--;
-			}
-		}
+			ra_iter = -pos;
 		// move the min_cost to top in b
 		if (min_cost_index > (b->top / 2))
+			rb_iter = b->top - min_cost_index;
+		else
+			rb_iter = -(min_cost_index + 1);
+#ifdef CONSOLE
+		ft_printf("candidate: [%d]\n", b->values[min_cost_index]);
+		ft_printf("ra_iter: %d, rb_iter: %d\n", ra_iter, rb_iter);
+		ft_stack_print(a, 'a');
+		ft_stack_print(b, 'b');
+#endif
+		if (ra_iter < 0 && rb_iter < 0)
 		{
-			i = b->top - min_cost_index;
-			while (i > 0)
+			if (ra_iter < rb_iter)
 			{
-				rb(b);
-				i--;
+				i = -rb_iter;
+				while (i > 0)
+				{
+					rrr(a, b);
+					i--;
+				}
+				i = rb_iter - ra_iter;
+				while (i > 0)
+				{
+					rra(a);
+					i--;
+				}
+			}
+			else
+			{
+				i = -ra_iter;
+				while (i > 0)
+				{
+					rrr(a, b);
+					i--;
+				}
+				i = ra_iter - rb_iter;
+				while (i > 0)
+				{
+					rrb(b);
+					i--;
+				}
+			}
+		}
+		else if (ra_iter > 0 && rb_iter > 0)
+		{
+			if (ra_iter < rb_iter)
+			{
+				i = ra_iter;
+				while (i > 0)
+				{
+					rr(a, b);
+					i--;
+				}
+				i = rb_iter - ra_iter;
+				while (i > 0)
+				{
+					rb(b);
+					i--;
+				}
+			}
+			else
+			{
+				i = rb_iter;
+				while (i > 0)
+				{
+					rr(a, b);
+					i--;
+				}
+				i = ra_iter - rb_iter;
+				while (i > 0)
+				{
+					ra(a);
+					i--;
+				}
 			}
 		}
 		else
 		{
-			i = min_cost_index;
-			while (i >= 0)
+			i = ft_abs(ra_iter);
+			while (i > 0)
 			{
-				rrb(b);
+				if (ra_iter > 0)
+					ra(a);
+				else
+					rra(a);
 				i--;
 			}
+			i = ft_abs(rb_iter);
+			while (i > 0)
+			{
+				if (rb_iter > 0)
+					rb(b);
+				else
+					rrb(b);
+				i--;
+			}
+
 		}
-		pa(a, b);	
-		//ft_stack_print(a, 'a');
-		//ft_stack_print(b, 'b');
-		//scanf("%3s", next);
+		pa(a, b);
 	}
 	int rev = (a->values[a->top] > a->values[a->top / 2]);
     while (a->values[a->top] > a->values[0])
@@ -495,8 +562,11 @@ int	main(int ac, char **av)
 	b = ft_stack_init(size);
 	if (!b)
 		return (ft_stack_free(a), 1);
-	//push_swap_console(a, b);
+#ifdef CONSOLE
+	push_swap_console(a, b);
+#else
 	push_swap(a, b);
+#endif
 	ft_stack_free(b);
 	ft_stack_free(a);
 	return (0);
