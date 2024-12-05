@@ -31,11 +31,10 @@ do
 done
 
 
-if [ $test_result != "OK" ] || [ $test_steps -gt $3 ]; then
-	echo ""
-	echo "## test $nb ##"
-	echo "test: [$test_arg]"
-	echo "number of instructions: $test_steps"
-	echo "checker result: $test_result"
-fi
+echo ""
+echo "## test $nb ##"
+echo "test: [$test_arg]"
+echo "number of instructions: $test_steps"
+echo "checker result: $test_result"
+
 rm -f tmp

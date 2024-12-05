@@ -6,7 +6,7 @@
 /*   By: inajah <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/01 10:01:56 by inajah            #+#    #+#             */
-/*   Updated: 2024/12/05 13:28:15 by inajah           ###   ########.fr       */
+/*   Updated: 2024/12/05 18:11:51 by inajah           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -322,16 +322,58 @@ int	get_cost_of_pos(t_stack *a, t_stack *b, int pos, int i)
 {
 	int cost_a;
 	int cost_b;
-	int min_index;
-	int	max_index;
+	int cost;
 
-	cost_a = ((a->top + 1) - pos) * (pos >= (a->top + 1) / 2) 
-		+ pos * (pos < (a->top + 1) / 2);
-	cost_b = (b->top - i) * (i >= b->top / 2) + (i + 1) * (i < b->top / 2);
+	if (pos > (a->top + 1) / 2)
+		cost_a = a->top - pos + 1;
+	else
+		cost_a = -pos;
+	if (i > (b->top / 2))
+		cost_b = b->top - i;
+	else
+		cost_b = -(i + 1);
+
+	if (cost_a < 0 && cost_b < 0)
+	{
+		if (cost_a < cost_b)
+			cost = -cost_a;
+		else
+			cost = -cost_b;
+	}
+	else if (cost_a > 0 && cost_b > 0)
+	{
+		if (cost_a < cost_b)
+			cost = cost_b;
+		else
+			cost = cost_a;
+	}
+	else
+		cost = ft_abs(cost_a) + ft_abs(cost_b);
+
 	if (pos == a->top + 1)
 		pos = a->top;
-	return (cost_a + cost_b + 1 + ft_abs(a->values[pos] - b->values[i]));
+	return (cost + 1 + ft_abs(a->values[pos] - b->values[i]));
 }
+
+/*void	push_swap_turk(t_stack *a, t_stack *b)
+{
+	if (ft_sorted_stack(a))
+		return ;
+	pb(a, b);
+	pb(a, b);
+
+	int min_cost_pos;
+	int	min_cost;
+	int	min_cost_index;
+	int i;
+
+	i = a->top;
+	while(i >= 0)
+	{
+		pos = get_pos_in_a(b, a->values[i]);
+
+	}
+}*/
 
 //#define CONSOLE
 
