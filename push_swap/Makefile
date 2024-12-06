@@ -10,6 +10,7 @@ SRC = main.c\
 	  ft_parse.c\
 	  ft_stack.c\
 	  ft_stack_ops.c\
+	  ft_utils.c
 
 OBJDIR = obj
 OBJ := $(SRC:%.c=$(OBJDIR)/%.o)

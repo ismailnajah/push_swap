@@ -6,7 +6,7 @@
 /*   By: inajah <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/01 10:01:56 by inajah            #+#    #+#             */
-/*   Updated: 2024/12/05 18:11:51 by inajah           ###   ########.fr       */
+/*   Updated: 2024/12/06 16:30:39 by inajah           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -193,28 +193,6 @@ int	ft_get_index(t_stack *s, int (*cmp)(int, int))
 	return (out_index);
 }
 
-void	ft_move_min_to_top(t_stack *a)
-{
-	int	min_index;
-
-	min_index = ft_get_index(a, min);
-	while (min_index != a->top)
-	{
-		if (min_index < a->top / 2)
-		{
-			rra(a);
-			min_index--;
-			if (min_index < 0)
-				min_index = a->top;
-		}
-		else
-		{
-			ra(a);
-			min_index++;
-		}
-	}
-}
-
 void	ft_swap(int *a, int *b)
 {
 	int tmp;
@@ -276,6 +254,20 @@ void get_sorted_array_index(t_stack *a)
 	free(index);
 }
 
+int ft_in_array(int *arr, int size, int value)
+{
+	int i;
+
+	i = 0;
+	while (i < size)
+	{
+		if (arr[i] == value)
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
 void	push_a_to_b(t_stack *a, t_stack *b)
 {
 	int middle;
@@ -318,6 +310,13 @@ int	get_pos_in_a(t_stack *a, int value)
 	return (i);
 }
 
+int	ft_max(int a, int b)
+{
+	if (a < b)
+		return (b);
+	return (a);
+}
+
 int	get_cost_of_pos(t_stack *a, t_stack *b, int pos, int i)
 {
 	int cost_a;
@@ -332,48 +331,16 @@ int	get_cost_of_pos(t_stack *a, t_stack *b, int pos, int i)
 		cost_b = b->top - i;
 	else
 		cost_b = -(i + 1);
-
 	if (cost_a < 0 && cost_b < 0)
-	{
-		if (cost_a < cost_b)
-			cost = -cost_a;
-		else
-			cost = -cost_b;
-	}
+		cost = ft_max(-cost_a, -cost_b);
 	else if (cost_a > 0 && cost_b > 0)
-	{
-		if (cost_a < cost_b)
-			cost = cost_b;
-		else
-			cost = cost_a;
-	}
+		cost = ft_max(cost_b, cost_a);
 	else
 		cost = ft_abs(cost_a) + ft_abs(cost_b);
-
 	if (pos == a->top + 1)
 		pos = a->top;
 	return (cost + 1 + ft_abs(a->values[pos] - b->values[i]));
 }
-
-/*void	push_swap_turk(t_stack *a, t_stack *b)
-{
-	if (ft_sorted_stack(a))
-		return ;
-	pb(a, b);
-	pb(a, b);
-
-	int min_cost_pos;
-	int	min_cost;
-	int	min_cost_index;
-	int i;
-
-	i = a->top;
-	while(i >= 0)
-	{
-		pos = get_pos_in_a(b, a->values[i]);
-
-	}
-}*/
 
 //#define CONSOLE
 
@@ -527,18 +494,6 @@ void	push_swap_cost(t_stack *a, t_stack *b)
     }
 }
 
-void	push_swap_naive(t_stack *a, t_stack *b)
-{
-	while (a->top > 4  && !ft_stack_sorted(a))
-	{
-		ft_move_min_to_top(a);
-		pb(a, b);
-	}
-	push_swap_small(a, b);
-	while (b->top >= 0)
-		pa(a,b);
-}
-
 void	push_swap(t_stack *a, t_stack *b)
 {
 	if (ft_stack_sorted(a))
@@ -578,7 +533,7 @@ void	push_swap_console(t_stack *a, t_stack *b)
 			rrb(b);
 		if (strcmp(buff, "index") == 0)
 			get_sorted_array_index(a);
-		if (strcmp(buff, "test") == 0)
+		if (strcmp(buff, "test") == 0)	
 			//ft_printf("min_index: %d, max_index: %d\n",ft_get_index(a, min), ft_get_index(a, max));
 			push_swap_cost(a, b);
 		count++;
