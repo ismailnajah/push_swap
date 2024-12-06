@@ -6,12 +6,14 @@
 /*   By: inajah <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/01 10:01:56 by inajah            #+#    #+#             */
-/*   Updated: 2024/12/06 19:43:39 by inajah           ###   ########.fr       */
+/*   Updated: 2024/12/06 20:44:06 by inajah           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 #include <stdio.h>
+
+void	sort_tiny_stack(t_stack *a);
 
 int	ft_perror(char *msg)
 {
@@ -89,36 +91,6 @@ void	rrr(t_stack *a, t_stack *b)
 	ft_printf("rrr\n");
 }
 
-#define TOP 2
-#define MID 1
-#define BOT 0
-
-void	sort_tiny_stack(t_stack *a)
-{
-	int	*arr;
-
-	arr = a->values;
-	if (a->top < 1)
-		return ;
-	if (a->top < 2)
-	{
-		if (arr[BOT] < arr[TOP])
-			sa(a);
-		return ;
-	}
-	if (arr[MID] < arr[BOT] && arr[MID] < arr[TOP] && arr[TOP] < arr[BOT])
-		return (sa(a));
-	if (arr[MID] < arr[BOT] && arr[MID] < arr[TOP] && arr[BOT] < arr[TOP])
-		return (ra(a));
-	if (arr[MID] > arr[BOT] && arr[MID] < arr[TOP] && arr[BOT] < arr[TOP])
-		return (sa(a), rra(a));
-	if (arr[MID] > arr[BOT] && arr[MID] > arr[TOP] && arr[BOT] > arr[TOP])
-		return (sa(a), ra(a));
-	if (arr[MID] > arr[BOT] && arr[MID] > arr[TOP] && arr[BOT] < arr[TOP])
-		return (rra(a));
-
-}
-
 int	ft_stack_sorted(t_stack *s)
 {
 	int	i;
@@ -131,40 +103,6 @@ int	ft_stack_sorted(t_stack *s)
 		i++;
 	}
 	return (TRUE);
-}
-
-void	push_swap_small(t_stack *a, t_stack *b)
-{
-	int i;
-	
-	while (a->top > 2 && !ft_stack_sorted(a))
-		pb(a, b);
-	sort_tiny_stack(a);
-	while (b->top >= 0)
-	{
-		i = a->top;
-		while (i >= 0)
-		{
-			if (b->values[b->top] < a->values[i])
-				break;
-			i--;
-		}
-		if (i == 0)
-			(rra(a), pa(a, b), ra(a), ra(a));
-		else if (i == a->top)
-			(pa(a, b));
-		else if (i == a->top - 1)
-			(pa(a, b), sa(a));
-		else if (i == a->top - 2)
-		{
-			if (a->top > 2)
-				(ra(a), pa(a, b), sa(a), rra(a));
-			else
-				(rra(a), pa(a, b), ra(a), ra(a));
-		}
-		else if (i == -1)
-			(pa(a, b), ra(a));
-	}
 }
 
 int	min(int a, int b)
@@ -537,203 +475,69 @@ void	_push_swap_cost(t_stack *a, t_stack *b)
     }
 }
 ///////////////////////////////////////////////////////////////////////////////////
-int	get_pos_in_a(t_stack *a, int value)
+
+#define TOP 2
+#define MID 1
+#define BOT 0
+
+void	sort_tiny_stack(t_stack *a)
+{
+	int	*arr;
+
+	arr = a->values;
+	if (a->top < 1)
+		return ;
+	if (a->top < 2)
+	{
+		if (arr[0] < arr[1])
+			sa(a);
+		return ;
+	}
+	if (arr[MID] < arr[BOT] && arr[MID] < arr[TOP] && arr[TOP] < arr[BOT])
+		return (sa(a));
+	if (arr[MID] < arr[BOT] && arr[MID] < arr[TOP] && arr[BOT] < arr[TOP])
+		return (ra(a));
+	if (arr[MID] > arr[BOT] && arr[MID] < arr[TOP] && arr[BOT] < arr[TOP])
+		return (sa(a), rra(a));
+	if (arr[MID] > arr[BOT] && arr[MID] > arr[TOP] && arr[BOT] > arr[TOP])
+		return (sa(a), ra(a));
+	if (arr[MID] > arr[BOT] && arr[MID] > arr[TOP] && arr[BOT] < arr[TOP])
+		return (rra(a));
+
+}
+
+void	push_swap_small(t_stack *a, t_stack *b)
 {
 	int i;
-	int j;
-	int	min_index;
-	int max_index;
-
-	min_index = ft_get_index(a, min);
-	max_index = ft_get_index(a, max);
-	i = min_index;
-	while (i != max_index)
-	{
-		j = i - 1;
-		if (j < 0)
-			j = a->top;
-		if (a->values[i] < value && value < a->values[j])
-			break ;
-		i = (i - 1) * (i - 1 >= 0) + a->top * (i - 1 < 0);
-	}
-	return (i);
-}
-
-int	get_cost_of_pos(t_stack *a, t_stack *b, int pos, int i)
-{
-	int cost_a;
-	int cost_b;
-	int cost;
-
-	if (pos > (a->top + 1) / 2)
-		cost_a = a->top - pos + 1;
-	else
-		cost_a = -pos;
-	if (i > (b->top / 2))
-		cost_b = b->top - i;
-	else
-		cost_b = -(i + 1);
-	if (cost_a < 0 && cost_b < 0)
-		cost = ft_max(-cost_a, -cost_b);
-	else if (cost_a > 0 && cost_b > 0)
-		cost = ft_max(cost_b, cost_a);
-	else
-		cost = ft_abs(cost_a) + ft_abs(cost_b);
-	if (pos == a->top + 1)
-		pos = a->top;
-	return (cost + 1 + ft_abs(a->values[pos] - b->values[i]));
-}
-
-//#define CONSOLE
-
-void	push_swap_cost(t_stack *a, t_stack *b)
-{
-	int pos;
-	int	cost;
-	int min_cost_pos;
-	int	min_cost;
-	int	min_cost_index;
-	int	i;
-	int ra_iter;
-	int rb_iter;
-	char next[10];
-
-	push_a_to_b(a, b);
-	if (a->top == 2)
-		sort_tiny_stack(a);
+	
+	while (a->top > 2 && !ft_stack_sorted(a))
+		pb(a, b);
+	sort_tiny_stack(a);
 	while (b->top >= 0)
 	{
-		i = b->top;
-		min_cost_index = i;
-		min_cost_pos = get_pos_in_a(a, b->values[i]);
-		min_cost = get_cost_of_pos(a, b, pos, i);
+		i = a->top;
 		while (i >= 0)
 		{
-			pos = get_pos_in_a(a, b->values[i]);
-			cost = get_cost_of_pos(a, b, pos, i);
-			if (cost < min_cost)
-			{
-				min_cost = cost;
-				min_cost_index = i;
-				min_cost_pos = pos;
-			}
+			if (b->values[b->top] < a->values[i])
+				break;
 			i--;
 		}
-		pos = min_cost_pos;
-		// make the min_cost posistion the top of a
-		if (pos > (a->top + 1) / 2)
-			ra_iter = a->top - pos + 1;
-		else
-			ra_iter = -pos;
-		// move the min_cost to top in b
-		if (min_cost_index > (b->top / 2))
-			rb_iter = b->top - min_cost_index;
-		else
-			rb_iter = -(min_cost_index + 1);
-#ifdef CONSOLE
-		ft_printf("candidate: [%d]\n", b->values[min_cost_index]);
-		ft_printf("ra_iter: %d, rb_iter: %d\n", ra_iter, rb_iter);
-		ft_stack_print(a, 'a');
-		ft_stack_print(b, 'b');
-#endif
-		if (ra_iter < 0 && rb_iter < 0)
+		if (i == 0)
+			(rra(a), pa(a, b), ra(a), ra(a));
+		else if (i == a->top)
+			(pa(a, b));
+		else if (i == a->top - 1)
+			(pa(a, b), sa(a));
+		else if (i == a->top - 2)
 		{
-			if (ra_iter < rb_iter)
-			{
-				i = -rb_iter;
-				while (i > 0)
-				{
-					rrr(a, b);
-					i--;
-				}
-				i = rb_iter - ra_iter;
-				while (i > 0)
-				{
-					rra(a);
-					i--;
-				}
-			}
+			if (a->top > 2)
+				(ra(a), pa(a, b), sa(a), rra(a));
 			else
-			{
-				i = -ra_iter;
-				while (i > 0)
-				{
-					rrr(a, b);
-					i--;
-				}
-				i = ra_iter - rb_iter;
-				while (i > 0)
-				{
-					rrb(b);
-					i--;
-				}
-			}
+				(rra(a), pa(a, b), ra(a), ra(a));
 		}
-		else if (ra_iter > 0 && rb_iter > 0)
-		{
-			if (ra_iter < rb_iter)
-			{
-				i = ra_iter;
-				while (i > 0)
-				{
-					rr(a, b);
-					i--;
-				}
-				i = rb_iter - ra_iter;
-				while (i > 0)
-				{
-					rb(b);
-					i--;
-				}
-			}
-			else
-			{
-				i = rb_iter;
-				while (i > 0)
-				{
-					rr(a, b);
-					i--;
-				}
-				i = ra_iter - rb_iter;
-				while (i > 0)
-				{
-					ra(a);
-					i--;
-				}
-			}
-		}
-		else
-		{
-			i = ft_abs(ra_iter);
-			while (i > 0)
-			{
-				if (ra_iter > 0)
-					ra(a);
-				else
-					rra(a);
-				i--;
-			}
-			i = ft_abs(rb_iter);
-			while (i > 0)
-			{
-				if (rb_iter > 0)
-					rb(b);
-				else
-					rrb(b);
-				i--;
-			}
-
-		}
-		pa(a, b);
+		else if (i == -1)
+			(pa(a, b), ra(a));
 	}
-	int rev = (a->values[a->top] > a->values[a->top / 2]);
-    while (a->values[a->top] > a->values[0])
-	{
-		if (rev)
-			ra(a);
-		else
-			rra(a);
-    }
 }
 
 void	push_swap(t_stack *a, t_stack *b)
