@@ -1,3 +1,7 @@
+tmp
+push_swap
+!push_swap/
+
 # Prerequisites
 *.d
 
@@ -15,8 +19,6 @@
 *.ilk
 *.map
 *.exp
-push_swap
-!push_swap/
 
 # Precompiled Headers
 *.gch

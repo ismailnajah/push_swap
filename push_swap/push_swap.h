@@ -6,7 +6,7 @@
 /*   By: inajah <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/01 10:03:10 by inajah            #+#    #+#             */
-/*   Updated: 2024/12/06 16:25:41 by inajah           ###   ########.fr       */
+/*   Updated: 2024/12/06 18:01:05 by inajah           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,30 @@
 # define PUSH_SWAP_H
 
 # include "libft/libft.h"
+
+typedef struct s_insts
+{
+	int ra;
+	int rb;
+	int rra;
+	int rrb;
+	int rr;
+	int rrr;
+	int	cost;
+}	t_insts;
+
+typedef struct s_moves
+{
+	int r;
+	int rr;
+	int cost;
+}	t_moves;
+
+typedef struct s_pos
+{
+	int above;
+	int below;
+}	t_pos;
 
 typedef struct s_stack
 {
