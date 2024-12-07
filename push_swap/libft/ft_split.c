@@ -6,7 +6,7 @@
 /*   By: inajah <inajah@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 13:53:37 by inajah            #+#    #+#             */
-/*   Updated: 2024/11/29 09:09:58 by inajah           ###   ########.fr       */
+/*   Updated: 2024/12/07 21:39:07 by inajah           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ int	ft_split_count(char **words)
 	int	i;
 
 	i = 0;
-	while (words[i] && words[i][0] != '\n')
+	while (words[i]) //&& words[i][0] != '\n')
 		i++;
 	return (i);
 }
