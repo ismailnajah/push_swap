@@ -6,14 +6,19 @@
 /*   By: inajah <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/07 10:30:00 by inajah            #+#    #+#             */
-/*   Updated: 2024/12/07 11:34:00 by inajah           ###   ########.fr       */
+/*   Updated: 2024/12/07 12:56:33 by inajah           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-static void	reset_insts(t_insts *insts)
+void	reset_insts(t_insts *insts)
 {
+	insts->pa = 0;
+	insts->pb = 0;
+	insts->sa = 0;
+	insts->sb = 0;
+	insts->ss = 0;
 	insts->ra = 0;
 	insts->rb = 0;
 	insts->rra = 0;
@@ -86,8 +91,15 @@ void	execute_insts(t_stack *a, t_stack *b, t_insts insts)
 {
 	rr(a, b, insts.rr);
 	rrr(a, b, insts.rrr);
+	ss(a, b, insts.ss);
+	ss(a, NULL, insts.sa);
+	ss(NULL, b, insts.sb);
 	rr(a, NULL, insts.ra);
 	rrr(a, NULL, insts.rra);
 	rr(NULL, b, insts.rb);
 	rrr(NULL, b, insts.rrb);
+	if (insts.pa == 1)
+		pa(a, b);
+	if (insts.pb == 1)
+		pb(a, b);
 }

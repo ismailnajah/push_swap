@@ -6,7 +6,7 @@
 /*   By: inajah <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/01 10:01:56 by inajah            #+#    #+#             */
-/*   Updated: 2024/12/07 11:17:49 by inajah           ###   ########.fr       */
+/*   Updated: 2024/12/07 11:52:14 by inajah           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ int	main(int ac, char **av)
 		return (1);
 	av = ft_get_args(ac, av);
 	if (!av)
-		return (ft_perror("Error\n"), 1);
+		return (ft_perror("Error\n"));
 	size = ft_split_count(av);
 	a = ft_parse_args(size, av);
 	ft_split_free(av);
@@ -80,7 +80,7 @@ int	main(int ac, char **av)
 		return (ft_perror("Error\n"));
 	b = ft_stack_init(size);
 	if (!b)
-		return (ft_stack_free(a), ft_perror("Error\n"), 1);
+		return (ft_stack_free(a), ft_perror("Error\n"));
 	push_swap(a, b);
 	ft_stack_free(b);
 	ft_stack_free(a);

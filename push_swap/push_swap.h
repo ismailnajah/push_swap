@@ -6,7 +6,7 @@
 /*   By: inajah <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/01 10:03:10 by inajah            #+#    #+#             */
-/*   Updated: 2024/12/07 11:34:57 by inajah           ###   ########.fr       */
+/*   Updated: 2024/12/07 12:55:08 by inajah           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,11 @@
 
 typedef struct s_insts
 {
+	int	pa;
+	int	pb;
+	int	sa;
+	int	sb;
+	int	ss;
 	int	ra;
 	int	rb;
 	int	rra;
@@ -71,6 +76,7 @@ int		ft_get_index(t_stack *s, int min_index);
 //ft_insts.c
 t_insts	get_best_insts(t_stack *a, t_stack *b, t_pos pos, int i);
 void	execute_insts(t_stack *a, t_stack *b, t_insts insts);
+void	reset_insts(t_insts *insts);
 
 //ft_moves.c
 t_moves	get_moves_in_a(t_stack *a, t_pos pos);
