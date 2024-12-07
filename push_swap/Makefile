@@ -7,6 +7,11 @@ LIBFTDIR = libft
 LIBFT = $(LIBFTDIR)/libft.a
 
 SRC = main.c\
+	  push_swap_small.c\
+	  push_swap_insts.c\
+	  push_swap_utils.c\
+	  ft_insts.c\
+	  ft_moves.c\
 	  ft_parse.c\
 	  ft_stack.c\
 	  ft_stack_ops.c\

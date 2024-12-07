@@ -1,4 +1,5 @@
 #!/bin/bash
+
 total=$2
 test_steps=0
 for ((i=1; i <= $2; i++))
@@ -11,9 +12,9 @@ do
 	done
 	printf "\r[%-50s] %d%%" "$bar" "$percentage"
 	arg=$(shuf -i 0-$1 -n $1 | tr '\n' ' ')
-	run=$(./push_swap $arg > tmp)
+	run=$(./push_swap/push_swap $arg > tmp)
 	steps=$(cat tmp | wc -l)
-	result=$(cat tmp | ../checker_linux $arg)
+	result=$(cat tmp | ./checker_linux $arg)
 	if [ $steps -gt $test_steps ]; then
 		nb=$i
 		test_arg=$arg

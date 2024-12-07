@@ -6,7 +6,7 @@
 /*   By: inajah <inajah@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 14:01:13 by inajah            #+#    #+#             */
-/*   Updated: 2024/11/13 14:47:21 by inajah           ###   ########.fr       */
+/*   Updated: 2024/12/07 10:46:23 by inajah           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,13 @@ int	ft_detect_linux(void)
 }
 
 #endif
+
+int	ft_perror(char *msg)
+{
+	if (msg)
+		write(STDERR, msg, ft_strlen(msg));
+	return (1);
+}
 
 int	ft_error(int error_flag)
 {

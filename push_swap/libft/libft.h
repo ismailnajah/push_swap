@@ -6,7 +6,7 @@
 /*   By: inajah <inajah@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 11:18:36 by inajah            #+#    #+#             */
-/*   Updated: 2024/12/05 10:32:05 by inajah           ###   ########.fr       */
+/*   Updated: 2024/12/07 10:47:23 by inajah           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,6 +106,7 @@ int		ft_putstr(char *str);
 int		ft_detect_linux(void);
 int		ft_error(int code);
 void	*ft_abort(void *buffer);
+int		ft_perror(char *msg);
 
 char	*get_next_line(int fd);
 int		ft_printf(const char *str, ...);
