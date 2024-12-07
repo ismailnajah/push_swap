@@ -1,5 +1,14 @@
 #!/bin/bash
 
+make -C push_swap > /dev/null
+main=$?
+make -C push_swap bonus > /dev/null
+bonus=$?
+
+if [ $main -ne 0 ] || [ $bonus -ne 0 ]; then
+	exit 1
+fi	
+
 total=$2
 test_steps=0
 for ((i=1; i <= $2; i++))
@@ -10,32 +19,35 @@ do
 	do
 		bar="${bar}#"
 	done
-	printf "\r[%-50s] %d%%" "$bar" "$percentage"
+	printf "\r[%-50s] %d%% (%d/%d)" "$bar" "$percentage" "$i" "$2"
 	arg=$(shuf -i 0-$1 -n $1 | tr '\n' ' ')
 	run=$(./push_swap/push_swap $arg > tmp)
 	steps=$(cat tmp | wc -l)
 	result=$(cat tmp | ./checker_linux $arg)
+	my_result=$(cat tmp | ./push_swap/checker $arg)
 	if [ $steps -gt $test_steps ]; then
 		nb=$i
 		test_arg=$arg
 		test_steps=$steps
 		test_result=$result
+		test_checker=$my_result
 	fi
-	if [ $result != "OK" ]; then
+	if [ $result != "OK" ] || [ $result != $my_result ]; then
 		echo ""
-		echo "## test $i ##"
-		echo "test: [$arg]"
-		echo "number of instructions: $steps"
-		echo "checker result: $result"
+		echo "Test <$i>: [$arg]"
+		echo "Instructions: $steps"
+		echo "Checker output: $result"
+		echo "My Checker output: $my_result"
 		break
 	fi
 done
 
-
 echo ""
-echo "## test $nb ##"
-echo "test: [$test_arg]"
-echo "number of instructions: $test_steps"
-echo "checker result: $test_result"
+printf "\n        << Max Instructions test >>\n"
+echo "Test <$nb> : [$test_arg]"
+echo ""
+echo "Instructions: $test_steps"
+echo "Checker output: $test_result"
+echo "My checker output: $test_checker"
 
 rm -f tmp

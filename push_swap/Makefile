@@ -47,7 +47,9 @@ $(OBJDIR):
 $(OBJDIR)/%.o: %.c | $(OBJDIR)
 	$(CC) $(FLAGS) -o $@ -c $^
 
-bonus: $(BOBJ) $(LIBFT) push_swap.h
+bonus: $(BNAME)
+
+$(BNAME): $(BOBJ) $(LIBFT) push_swap.h
 	$(CC) $(CFLAGS) -o $(BNAME) $(BOBJ) $(LIBFT)
 
 clean:
@@ -57,6 +59,7 @@ clean:
 fclean: clean
 	make -s -C $(LIBFTDIR) fclean
 	rm -f $(NAME)
+	rm -f $(BNAME)
 
 re: fclean all
 
