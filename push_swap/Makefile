@@ -45,7 +45,7 @@ $(OBJDIR):
 	mkdir -p obj
 
 $(OBJDIR)/%.o: %.c | $(OBJDIR)
-	$(CC) $(FLAGS) -o $@ -c $^
+	$(CC) $(CFLAGS) -o $@ -c $^
 
 bonus: $(BNAME)
 
