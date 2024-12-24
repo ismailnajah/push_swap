@@ -6,7 +6,7 @@
 /*   By: inajah <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/07 11:05:02 by inajah            #+#    #+#             */
-/*   Updated: 2024/12/07 11:21:16 by inajah           ###   ########.fr       */
+/*   Updated: 2024/12/24 18:28:18 by inajah           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,6 @@ static void	get_sorted_array_indexes(t_stack *a, int *indexes)
 {
 	int	swap;
 	int	i;
-	int	j;
 
 	i = 0;
 	while (i < a->top + 1)
